@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mylab.Systlog
+namespace MyLab.Syslog
 {
     public class Class1
     {

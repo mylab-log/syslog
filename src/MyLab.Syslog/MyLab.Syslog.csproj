@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Andrey O.</Authors>
+    <Copyright>Copyright (c) 2018 Andrey Osintsev &lt;ozzy.ext@gmail.com&gt;</Copyright>
+    <PackageProjectUrl>https://github.com/ozzy-ext/mylab-syslog</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ozzy-ext/mylab-syslog.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>syslog log loggin</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

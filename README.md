@@ -2,6 +2,8 @@
 
 For .NET Core 2.1+
 
+[![NuGet](https://img.shields.io/nuget/v/MyLab.Syslog.svg)](https://www.nuget.org/packages/MyLab.Syslog/)
+
 Sends logging messages to a `syslog` server.
 
 ## How to use

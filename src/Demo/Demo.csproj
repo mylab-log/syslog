@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\MyLab.Syslog\MyLab.Syslog.csproj" />
+    <ProjectReference Include="..\MyLab.Syslog\MyLab.Syslog.csproj" />
   </ItemGroup>
 
   <ItemGroup>

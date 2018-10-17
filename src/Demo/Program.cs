@@ -13,11 +13,14 @@ namespace Demo
         {
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddLogging(c => c.AddSyslog());
-
+            
             var config = new ConfigurationBuilder()
                 .AddJsonFile("config.json")
                 .Build();
-            serviceCollection.Configure<SyslogLoggerOptions>(config.GetSection("syslog"));
+
+            serviceCollection.AddSingleton(config);
+
+            serviceCollection.Configure<SyslogLoggerOptions>(config.GetSection("Logging:Syslog"));
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -37,7 +40,7 @@ namespace Demo
 
             log.Error(new EventId(345, "Видимо что-то случилось"), ex).Write();
 
-            //Console.ReadLine();
+            Console.ReadLine();
         }
     }
 }

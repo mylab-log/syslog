@@ -1,6 +1,8 @@
 {
-  "syslog": {
-    "RemoteHost": "localhost",
-    "RemotePort":  "5514" 
+  "Logging": {
+    "Syslog": {
+      "RemoteHost": "localhost",
+      "RemotePort": "5514"
+    }
   }
 }

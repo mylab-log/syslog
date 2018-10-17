@@ -43,16 +43,18 @@ Also there is able to configure `syslog` logger through config. The following ex
 
 ```json
 {
-  "syslog": {
-    "RemoteHost": "syslog-collector.corp",
-    "RemotePort":  "514" 
+  "Logging": {
+    "Syslog": {
+      "RemoteHost": "localhost",
+      "RemotePort": "5514"
+    }
   }
 }
 ```
 
 ```C#
 ....
-services.Configure<SyslogLoggerOptions>(Configuration.GetSection("syslog"));
+services.Configure<SyslogLoggerOptions>(Configuration.GetSection("Logging:Syslog"));
 ....
 ```
 

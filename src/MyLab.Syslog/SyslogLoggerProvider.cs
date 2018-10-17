@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 
 namespace MyLab.Syslog
 {
-    [ProviderAlias("syslog")]
+    [ProviderAlias("Syslog")]
     class SyslogLoggerProvider : ILoggerProvider
     {
         public SyslogLoggerOptions Options { get; }

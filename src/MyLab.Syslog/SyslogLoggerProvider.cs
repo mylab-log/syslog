@@ -26,7 +26,10 @@ namespace MyLab.Syslog
 
         public ILogger CreateLogger(string categoryName)
         {
-            return new SyslogLogger(new UdpLogSenderFactory(), Options);
+            var senderFactory = (Options?.UseTcp ?? false)
+                ? (ILogSenderFactory) new TcpLogSenderFactory()
+                : new UdpLogSenderFactory();
+            return new SyslogLogger(senderFactory, Options);
         }
 
         public void Dispose()

@@ -49,6 +49,11 @@
             Gets syslog port
             </summary>
         </member>
+        <member name="P:MyLab.Syslog.SyslogLoggerOptions.UseTcp">
+            <summary>
+            Use TCP connection instead a UDP
+            </summary>
+        </member>
         <member name="P:MyLab.Syslog.SyslogLoggerOptions.Facility">
             <summary>
             Gets facility. Local7 - by default.

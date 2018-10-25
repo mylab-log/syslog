@@ -31,6 +31,11 @@
         public int RemotePort { get; set; }
 
         /// <summary>
+        /// Use TCP connection instead a UDP
+        /// </summary>
+        public bool UseTcp { get; set; } = false;
+
+        /// <summary>
         /// Gets facility. Local7 - by default.
         /// </summary>
         /// <remarks>https://tools.ietf.org/html/rfc5424#section-6.2.1</remarks>

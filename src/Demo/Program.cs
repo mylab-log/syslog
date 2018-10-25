@@ -19,28 +19,28 @@ namespace Demo
                 .Build();
 
             serviceCollection.AddSingleton(config);
-
             serviceCollection.Configure<SyslogLoggerOptions>(config.GetSection("Logging:Syslog"));
-
+            
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             var lf = serviceProvider.GetService<ILoggerFactory>();
             var logger = lf.CreateLogger("mycat");
             var log = logger.Dsl();
 
-            Exception ex;
-            try
-            {
-                throw new InvalidOperationException("Точно что-то случилось!");
-            }
-            catch (Exception e)
-            {
-                ex = e;
-            }
+            //Exception ex;
+            //try
+            //{
+            //    throw new InvalidOperationException("Точно что-то случилось!");
+            //}
+            //catch (Exception e)
+            //{
+            //    ex = e;
+            //}
 
-            log.Error(new EventId(345, "Видимо что-то случилось"), ex).Write();
+            log.Act("Ololo").Write();
+            //log.Error(new EventId(345, "Видимо что-то случилось"), ex).Write();
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
     }
 }

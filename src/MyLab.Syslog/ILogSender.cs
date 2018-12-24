@@ -8,6 +8,8 @@ namespace MyLab.Syslog
 {
     interface ILogSender
     {
+        int LengthLimit { get; }
+        
         Task Send(string log);
     }
 
@@ -21,7 +23,9 @@ namespace MyLab.Syslog
             Hostname = hostname;
             Port = port;
         }
-        
+
+        public int LengthLimit { get; } = 65000; //Actually 65507
+
         public async Task  Send(string log)
         {
             var bin = Encoding.UTF8.GetBytes(log);
@@ -41,6 +45,8 @@ namespace MyLab.Syslog
             Hostname = hostname;
             Port = port;
         }
+
+        public int LengthLimit { get; } = -1;
 
         public async Task Send(string log)
         {

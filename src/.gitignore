@@ -15,3 +15,5 @@ TestResults
 *.nupkg
 *.bak
 .vs
+
+.idea

@@ -60,5 +60,10 @@
             </summary>
             <remarks>https://tools.ietf.org/html/rfc5424#section-6.2.1</remarks>
         </member>
+        <member name="P:MyLab.Syslog.SyslogLoggerOptions.IncludeEventId">
+            <summary>
+            Include event id in message
+            </summary>
+        </member>
     </members>
 </doc>

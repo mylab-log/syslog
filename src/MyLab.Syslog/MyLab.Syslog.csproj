@@ -14,11 +14,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\Projects\my\mylab-syslog\src\MyLab.Syslog\MyLab.Syslog.xml</DocumentationFile>
+    <DocumentationFile>.\MyLab.Syslog.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>D:\Projects\my\mylab-syslog\src\MyLab.Syslog\MyLab.Syslog.xml</DocumentationFile>
+    <DocumentationFile>.\MyLab.Syslog.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

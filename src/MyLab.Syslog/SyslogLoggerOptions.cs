@@ -40,5 +40,10 @@
         /// </summary>
         /// <remarks>https://tools.ietf.org/html/rfc5424#section-6.2.1</remarks>
         public int Facility { get; set; } = 23;
+
+        /// <summary>
+        /// Include event id in message
+        /// </summary>
+        public bool IncludeEventId { get; set; } = false;
     }
 }

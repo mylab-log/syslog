@@ -1,10 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Net;
 using System.Reflection;
-using System.Text;
-using System.Xml.Serialization;
 using Microsoft.Extensions.Logging;
 using MyLab.Logging;
 using Newtonsoft.Json;
@@ -45,21 +43,51 @@ namespace MyLab.Syslog
             string hostname = Options?.Hostname ?? Dns.GetHostName();
             string appName = Options?.AppName ?? Assembly.GetEntryAssembly().GetName().Name;
             string procId = Options?.ProcId ?? Process.GetCurrentProcess().Id.ToString();
-            
-            string msg = $"<{priority}>1 {logTime:s}Z {hostname} {appName} {procId} {eventId.Id} BOM {messagePayload}";
 
-            SendMessage(msg);
+            var eventIdInjection = Options.IncludeEventId
+                ? eventId.Id + " "
+                : string.Empty;
+            
+            string msgStart = $"<{priority}>1 {logTime:s}Z {hostname} {appName} {procId} {eventIdInjection}"; //\uFEFF
+
+            var sender = CreateLogSender();
+
+            var messagePayloads = CreateMessagePayloads(messagePayload, sender.LengthLimit - msgStart.Length);
+
+            foreach (var payload in messagePayloads)
+            {
+                sender.Send(msgStart + payload).Wait();
+            }
         }
 
-        private void SendMessage(string msg)
-            {
+        private ILogSender CreateLogSender()
+        {
             if (string.IsNullOrEmpty(Options.RemoteHost))
                 throw new InvalidOperationException("Host name is not specified");
             if (Options.RemotePort == 0)
                 throw new InvalidOperationException("Port is not specified");
+            
+            return LogSenderFactory.Create(Options.RemoteHost, Options.RemotePort);
+        }
 
-            var sender = LogSenderFactory.Create(Options.RemoteHost, Options.RemotePort);
-            sender.Send(msg).Wait();
+        private IEnumerable<string> CreateMessagePayloads(string messagePayload, int senderLengthLimit)
+        {
+            if (senderLengthLimit <= 0)
+            {
+                yield return messagePayload;
+                yield break;
+            }
+
+            string left = messagePayload;
+
+            while (left.Length > senderLengthLimit)
+            {
+                yield return left.Substring(0, senderLengthLimit);
+                left = left.Substring(senderLengthLimit, left.Length - senderLengthLimit);
+            }
+
+            if (left.Length != 0)
+                yield return left;
         }
 
         private int CalcPriority(LogLevel logLevel)

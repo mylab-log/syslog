@@ -48,7 +48,7 @@ namespace MyLab.Syslog
                 ? eventId.Id + " "
                 : string.Empty;
             
-            string msgStart = $"<{priority}>1 {logTime:s}Z {hostname} {appName} {procId} {eventIdInjection}"; //\uFEFF
+            string msgStart = $"<{priority}>1 {logTime:yyyy-MM-dd'T'HH:mm:ssK} {hostname} {appName} {procId} {eventIdInjection}"; //\uFEFF
 
             var sender = CreateLogSender();
 

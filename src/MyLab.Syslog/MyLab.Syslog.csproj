@@ -9,16 +9,16 @@
     <RepositoryUrl>https://github.com/ozzy-ext/mylab-syslog.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>syslog log loggin</PackageTags>
-    <Version>1.2.1</Version>
-    <FileVersion>1.2.1.0</FileVersion>
+    <Version>1.2.2</Version>
+    <FileVersion>1.2.2.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\Projects\my\mylab-syslog\src\MyLab.Syslog\MyLab.Syslog.xml</DocumentationFile>
+    <DocumentationFile>.\MyLab.Syslog.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>D:\Projects\my\mylab-syslog\src\MyLab.Syslog\MyLab.Syslog.xml</DocumentationFile>
+    <DocumentationFile>.\MyLab.Syslog.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

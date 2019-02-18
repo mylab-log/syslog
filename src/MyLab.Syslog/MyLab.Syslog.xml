@@ -65,5 +65,11 @@
             Include event id in message
             </summary>
         </member>
+        <member name="P:MyLab.Syslog.SyslogLoggerOptions.Format">
+            <summary>
+            Gets log message format
+            </summary>
+            <remarks>json - by default. Available values: json, yaml</remarks>
+        </member>
     </members>
 </doc>

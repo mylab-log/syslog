@@ -60,7 +60,14 @@ namespace MyLab.Syslog
 
             for (int i = 0; i < messagePayloads.Length; i++)
             {
-                sender.Send(msgStart + messagePayloads[i]).Wait();
+                try
+                {
+                    sender.Send(msgStart + messagePayloads[i]).Wait();
+                }
+                catch(AggregateException e)
+                {
+                    throw e.InnerException;
+                }
             }
         }
 

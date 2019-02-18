@@ -45,5 +45,11 @@
         /// Include event id in message
         /// </summary>
         public bool IncludeEventId { get; set; } = false;
+
+        /// <summary>
+        /// Gets log message format
+        /// </summary>
+        /// <remarks>json - by default. Available values: json, yaml</remarks>
+        public string Format { get; set; } = "json";
     }
 }

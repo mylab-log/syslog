@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text;
+using System.Threading;
 using Microsoft.Extensions.Logging;
 using MyLab.Logging;
 using Newtonsoft.Json;
+using YamlDotNet.Serialization;
 
 namespace MyLab.Syslog
 {
@@ -30,7 +34,7 @@ namespace MyLab.Syslog
 
             if (le != null)
             {
-                messagePayload = SerializeLogEntity(le);
+                messagePayload = SerializeLogEntity(le, Options.Format);
                 logTime = le.Time;
             }
             else
@@ -52,11 +56,11 @@ namespace MyLab.Syslog
 
             var sender = CreateLogSender();
 
-            var messagePayloads = CreateMessagePayloads(messagePayload, sender.LengthLimit - msgStart.Length);
+            var messagePayloads = CreateMessagePayloads(messagePayload, sender.LengthLimit - msgStart.Length).ToArray();
 
-            foreach (var payload in messagePayloads)
+            for (int i = 0; i < messagePayloads.Length; i++)
             {
-                sender.Send(msgStart + payload).Wait();
+                sender.Send(msgStart + messagePayloads[i]).Wait();
             }
         }
 
@@ -78,16 +82,22 @@ namespace MyLab.Syslog
                 yield break;
             }
 
-            string left = messagePayload;
+            var binPayload = Encoding.UTF8.GetBytes(messagePayload);
 
-            while (left.Length > senderLengthLimit)
+            int index = 0;
+            bool isLast;
+
+            do
             {
-                yield return left.Substring(0, senderLengthLimit);
-                left = left.Substring(senderLengthLimit, left.Length - senderLengthLimit);
-            }
+                var left = binPayload.Length - index;
+                isLast = left <= senderLengthLimit;
 
-            if (left.Length != 0)
-                yield return left;
+                var chunk = isLast ? left : senderLengthLimit;
+
+                yield return Encoding.UTF8.GetString(binPayload, index, chunk);
+
+                index += chunk;
+            } while (!isLast);
         }
 
         private int CalcPriority(LogLevel logLevel)
@@ -118,12 +128,24 @@ namespace MyLab.Syslog
             return Options.Facility * 8 + severity;
         }
 
-        string SerializeLogEntity(LogEntity logEntity)
+        string SerializeLogEntity(LogEntity logEntity, string format)
         {
-            return JsonConvert.SerializeObject(logEntity, new JsonSerializerSettings
+            switch (format.ToLower())
             {
-                NullValueHandling = NullValueHandling.Ignore
-            });
+                case "json":
+                {
+                    return JsonConvert.SerializeObject(logEntity, new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore
+                    });        
+                }
+                case "yaml":
+                {
+                    var s = new SerializerBuilder().Build();
+                    return s.Serialize(logEntity);
+                }
+                default: throw new NotSupportedException("Format not supported");
+            }   
         }
 
         public bool IsEnabled(LogLevel logLevel)

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -24,12 +25,12 @@ namespace MyLab.Syslog
             Port = port;
         }
 
-        public int LengthLimit { get; } = 65000; //Actually 65507
+        public int LengthLimit { get; } = 8000; //Actually 65507 bytes
 
         public async Task  Send(string log)
         {
             var bin = Encoding.UTF8.GetBytes(log);
-
+            
             var cl = new UdpClient();
             await cl.SendAsync(bin, bin.Length, Hostname, Port);
         }

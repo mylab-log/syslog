@@ -71,5 +71,40 @@
             </summary>
             <remarks>json - by default. Available values: json, yaml</remarks>
         </member>
+        <member name="T:MyLab.Syslog.SyslogMessageSerializer">
+            <summary>
+            Serializes message
+            </summary>
+        </member>
+        <member name="P:MyLab.Syslog.SyslogMessageSerializer.Level">
+            <summary>
+            Message level
+            </summary>
+        </member>
+        <member name="P:MyLab.Syslog.SyslogMessageSerializer.LogTime">
+            <summary>
+            Occurence time
+            </summary>
+        </member>
+        <member name="P:MyLab.Syslog.SyslogMessageSerializer.EventId">
+            <summary>
+            Event identifier
+            </summary>
+        </member>
+        <member name="M:MyLab.Syslog.SyslogMessageSerializer.#ctor(MyLab.Syslog.SyslogLoggerOptions)">
+            <summary>
+            Initializes a new instance of <see cref="T:MyLab.Syslog.SyslogMessageSerializer"/>
+            </summary>
+        </member>
+        <member name="M:MyLab.Syslog.SyslogMessageSerializer.GetHeaderLen">
+            <summary>
+            Gets header length
+            </summary>
+        </member>
+        <member name="M:MyLab.Syslog.SyslogMessageSerializer.Serialize(System.String)">
+            <summary>
+            Serializes message with content
+            </summary>
+        </member>
     </members>
 </doc>

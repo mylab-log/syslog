@@ -27,42 +27,33 @@ namespace MyLab.Syslog
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            DateTime logTime;
-            string messagePayload;
-
             var le = state as LogEntity;
-
-            if (le != null)
-            {
-                messagePayload = SerializeLogEntity(le, Options.Format);
-                logTime = le.Time;
-            }
-            else
-            {
-                messagePayload = formatter(state, exception).Replace(Environment.NewLine, "\\r\\n");
-                logTime = DateTime.Now;
-            }
-
-            int priority = CalcPriority(logLevel);
-            string hostname = Options?.Hostname ?? Dns.GetHostName();
-            string appName = Options?.AppName ?? Assembly.GetEntryAssembly().GetName().Name;
-            string procId = Options?.ProcId ?? Process.GetCurrentProcess().Id.ToString();
-
-            var eventIdInjection = Options.IncludeEventId
-                ? eventId.Id + " "
-                : string.Empty;
             
-            string msgStart = $"<{priority}>1 {logTime:yyyy-MM-dd'T'HH:mm:ssK} {hostname} {appName} {procId} {eventIdInjection}"; //\uFEFF
+            var logTime = le?.Time ?? DateTime.Now;
+            
+            string messagePayload = le != null  
+                ? SerializeLogEntity(le, Options.Format)
+                : formatter(state, exception).Replace(Environment.NewLine, "\\r\\n");
 
+            var serializer = new SyslogMessageSerializer(Options)
+            {
+                EventId = eventId,
+                LogTime = logTime,
+                Level = logLevel
+            };
+            
             var sender = CreateLogSender();
 
-            var messagePayloads = CreateMessagePayloads(messagePayload, sender.LengthLimit - msgStart.Length).ToArray();
+            var messagePayloads = CreateMessagePayloads(
+                messagePayload, 
+                sender.LengthLimit - serializer.GetHeaderLen()
+                ).ToArray();
 
             for (int i = 0; i < messagePayloads.Length; i++)
             {
                 try
                 {
-                    sender.Send(msgStart + messagePayloads[i]).Wait();
+                    sender.Send(serializer.Serialize(messagePayloads[i])).Wait();
                 }
                 catch(AggregateException e)
                 {
@@ -136,7 +127,7 @@ namespace MyLab.Syslog
         }
 
         string SerializeLogEntity(LogEntity logEntity, string format)
-        {
+        {   
             switch (format.ToLower())
             {
                 case "json":

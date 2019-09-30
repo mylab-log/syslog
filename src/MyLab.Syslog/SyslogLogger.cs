@@ -57,7 +57,8 @@ namespace MyLab.Syslog
                 }
                 catch(AggregateException e)
                 {
-                    throw e.InnerException;
+                    Console.WriteLine("MyLab.Syslog error.");
+                    Console.WriteLine(e.ToString());
                 }
             }
         }

@@ -1,4 +1,4 @@
-﻿namespace MyLab.Syslog
+﻿namespace MyLab.Log.Syslog
 {
     interface ILogSenderFactory
     {

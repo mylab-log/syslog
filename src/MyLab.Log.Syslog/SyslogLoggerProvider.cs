@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace MyLab.Syslog
+namespace MyLab.Log.Syslog
 {
     [ProviderAlias("Syslog")]
     class SyslogLoggerProvider : ILoggerProvider

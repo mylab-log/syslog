@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Reflection;
 using System.Text;
-using System.Threading;
 using Microsoft.Extensions.Logging;
-using MyLab.Logging;
-using Newtonsoft.Json;
-using YamlDotNet.Serialization;
+using MyLab.Log.Serializing;
 
-namespace MyLab.Syslog
+namespace MyLab.Log.Syslog
 {
     internal class SyslogLogger : ILogger
     {
+        private const string CroppedSuffix = "... [cropped]";
+        private static readonly int CroppedSuffixLen = Encoding.UTF8.GetByteCount(CroppedSuffix);
+
         public ILogSenderFactory LogSenderFactory { get; }
 
         public SyslogLoggerOptions Options { get; }
@@ -31,7 +26,7 @@ namespace MyLab.Syslog
             
             var logTime = le?.Time ?? DateTime.Now;
             
-            string messagePayload = le != null  
+            string messageString = le != null  
                 ? SerializeLogEntity(le, Options.Format)
                 : formatter(state, exception).Replace(Environment.NewLine, "\\r\\n");
 
@@ -44,22 +39,18 @@ namespace MyLab.Syslog
             
             var sender = CreateLogSender();
 
-            var messagePayloads = CreateMessagePayloads(
-                messagePayload, 
-                sender.LengthLimit - serializer.GetHeaderLen()
-                ).ToArray();
+            var messagePayload = CreateMessagePayload(
+                messageString, 
+                sender.LengthLimit - serializer.GetHeaderLen());
 
-            for (int i = 0; i < messagePayloads.Length; i++)
+            try
             {
-                try
-                {
-                    sender.Send(serializer.Serialize(messagePayloads[i])).Wait();
-                }
-                catch(AggregateException e)
-                {
-                    Console.WriteLine("MyLab.Syslog error.");
-                    Console.WriteLine(e.ToString());
-                }
+                sender.Send(serializer.Serialize(messagePayload)).Wait();
+            }
+            catch (AggregateException e)
+            {
+                Console.WriteLine("MyLab.Syslog error.");
+                Console.WriteLine(e.ToString());
             }
         }
 
@@ -73,58 +64,23 @@ namespace MyLab.Syslog
             return LogSenderFactory.Create(Options.RemoteHost, Options.RemotePort);
         }
 
-        private IEnumerable<string> CreateMessagePayloads(string messagePayload, int senderLengthLimit)
+        private string CreateMessagePayload(string messagePayload, int senderLengthLimit)
         {
             if (senderLengthLimit <= 0)
             {
-                yield return messagePayload;
-                yield break;
+                return "[empty]";
             }
 
             var binPayload = Encoding.UTF8.GetBytes(messagePayload);
 
-            int index = 0;
-            bool isLast;
-
-            do
+            if (binPayload.Length <= senderLengthLimit)
             {
-                var left = binPayload.Length - index;
-                isLast = left <= senderLengthLimit;
-
-                var chunk = isLast ? left : senderLengthLimit;
-
-                yield return Encoding.UTF8.GetString(binPayload, index, chunk);
-
-                index += chunk;
-            } while (!isLast);
-        }
-
-        private int CalcPriority(LogLevel logLevel)
-        {
-            int severity;
-
-
-            switch (logLevel)
-            {
-                case LogLevel.Trace:
-                case LogLevel.Debug:
-                    severity = 7;
-                    break;
-                case LogLevel.Warning:
-                    severity = 4;
-                    break;
-                case LogLevel.Error:
-                    severity = 3;
-                    break;
-                case LogLevel.Critical:
-                    severity = 2;
-                    break;
-                default:
-                    severity = 6;
-                    break;
+                return Encoding.UTF8.GetString(binPayload, 0, binPayload.Length);
             }
-
-            return Options.Facility * 8 + severity;
+            else
+            {
+                return Encoding.UTF8.GetString(binPayload, 0, senderLengthLimit-CroppedSuffixLen) + CroppedSuffix;
+            }
         }
 
         string SerializeLogEntity(LogEntity logEntity, string format)
@@ -133,15 +89,11 @@ namespace MyLab.Syslog
             {
                 case "json":
                 {
-                    return JsonConvert.SerializeObject(logEntity, new JsonSerializerSettings
-                    {
-                        NullValueHandling = NullValueHandling.Ignore
-                    });        
+                    return logEntity.ToJson();
                 }
                 case "yaml":
                 {
-                    var s = new SerializerBuilder().Build();
-                    return s.Serialize(logEntity);
+                    return logEntity.ToYaml();
                 }
                 default: throw new NotSupportedException("Format not supported");
             }   

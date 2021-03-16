@@ -1,8 +1,9 @@
 using System;
 using Microsoft.Extensions.Logging;
+using MyLab.Log.Syslog;
 using Xunit;
 
-namespace MyLab.Syslog.Tests
+namespace UnitTests
 {
     public class SyslogMessageSerializerBehavior
     {

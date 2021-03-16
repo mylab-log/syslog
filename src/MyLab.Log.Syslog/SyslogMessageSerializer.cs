@@ -3,9 +3,8 @@ using System.Diagnostics;
 using System.Net;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
-namespace MyLab.Syslog
+namespace MyLab.Log.Syslog
 {
     /// <summary>
     /// Serializes message

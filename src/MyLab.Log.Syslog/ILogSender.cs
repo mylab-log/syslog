@@ -1,11 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Net;
+﻿using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyLab.Syslog
+namespace MyLab.Log.Syslog
 {
     interface ILogSender
     {
@@ -31,7 +29,7 @@ namespace MyLab.Syslog
         {
             var bin = Encoding.UTF8.GetBytes(log);
             
-            var cl = new UdpClient();
+            using var cl = new UdpClient();
             await cl.SendAsync(bin, bin.Length, Hostname, Port);
         }
     }
@@ -51,13 +49,13 @@ namespace MyLab.Syslog
 
         public async Task Send(string log)
         {
-            var cl = new TcpClient(Hostname, Port);
+            using var cl = new TcpClient(Hostname, Port);
             
-            using (var s = cl.GetStream())
-            using (var w = new StreamWriter(s))
-            {
-                await w.WriteAsync(log);
-            }
+            await using var s = cl.GetStream();
+            await using var w = new StreamWriter(s);
+
+            await w.WriteAsync(log);
+            
         }
     }
 

@@ -1,9 +1,9 @@
 {
   "Logging": {
     "Syslog": {
-      "RemoteHost": "10.251.85.73",
+      "RemoteHost": "192.168.80.198",
       "RemotePort": "514",
-      "UseTcp": "true",
+      "UseTcp": "false",
       "Format": "yaml",
       "LogLevel": {
         "Default": "Information"

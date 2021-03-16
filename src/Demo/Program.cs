@@ -4,8 +4,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MyLab.Syslog;
-using MyLab.LogDsl;
+using MyLab.Log.Syslog;
 
 namespace Demo
 {

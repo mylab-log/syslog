@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,11 +12,10 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
-    <PackageReference Include="MyLab.LogDsl" Version="1.1.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyLab.Syslog\MyLab.Syslog.csproj" />
+    <ProjectReference Include="..\MyLab.Log.Syslog\MyLab.Log.Syslog.csproj" />
   </ItemGroup>
 
   <ItemGroup>

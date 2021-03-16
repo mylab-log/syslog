@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MyLab.Log.Syslog</name>
+    </assembly>
+    <members>
+        <member name="T:MyLab.Log.Syslog.IntegrationExtension">
+            <summary>
+            Extensions to integrate syslog logging
+            </summary>
+        </member>
+        <member name="F:MyLab.Log.Syslog.IntegrationExtension.DefaultConfigSectionName">
+            <summary>
+            Default value for configuration section name
+            </summary>
+        </member>
+        <member name="M:MyLab.Log.Syslog.IntegrationExtension.AddSyslog(Microsoft.Extensions.Logging.ILoggingBuilder,System.Action{MyLab.Log.Syslog.SyslogLoggerOptions})">
+            <summary>
+            Adds SYSLOG compatible logger with options
+            </summary>
+        </member>
+        <member name="M:MyLab.Log.Syslog.IntegrationExtension.ConfigureSyslog(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{MyLab.Log.Syslog.SyslogLoggerOptions})">
+            <summary>
+            Configure MyLab.Log.Syslog
+            </summary>
+        </member>
+        <member name="M:MyLab.Log.Syslog.IntegrationExtension.ConfigureSyslog(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.String)">
+            <summary>
+            Configure MyLab.Log.Syslog
+            </summary>
+        </member>
+        <member name="T:MyLab.Log.Syslog.SyslogLoggerOptions">
+            <summary>
+            Contains syslog writing options
+            </summary>
+        </member>
+        <member name="P:MyLab.Log.Syslog.SyslogLoggerOptions.Hostname">
+            <summary>
+            Overrides default hostname
+            </summary>
+        </member>
+        <member name="P:MyLab.Log.Syslog.SyslogLoggerOptions.AppName">
+            <summary>
+            Overrides current application name
+            </summary>
+        </member>
+        <member name="P:MyLab.Log.Syslog.SyslogLoggerOptions.ProcId">
+            <summary>
+            Overrides default process id. Should be generated value.
+            </summary>
+        </member>
+        <member name="P:MyLab.Log.Syslog.SyslogLoggerOptions.RemoteHost">
+            <summary>
+            Gets syslog host
+            </summary>
+        </member>
+        <member name="P:MyLab.Log.Syslog.SyslogLoggerOptions.RemotePort">
+            <summary>
+            Gets syslog port
+            </summary>
+        </member>
+        <member name="P:MyLab.Log.Syslog.SyslogLoggerOptions.UseTcp">
+            <summary>
+            Use TCP connection instead a UDP
+            </summary>
+        </member>
+        <member name="P:MyLab.Log.Syslog.SyslogLoggerOptions.Facility">
+            <summary>
+            Gets facility. Local7 - by default.
+            </summary>
+            <remarks>https://tools.ietf.org/html/rfc5424#section-6.2.1</remarks>
+        </member>
+        <member name="P:MyLab.Log.Syslog.SyslogLoggerOptions.IncludeEventId">
+            <summary>
+            Include event id in message
+            </summary>
+        </member>
+        <member name="P:MyLab.Log.Syslog.SyslogLoggerOptions.Format">
+            <summary>
+            Gets log message format
+            </summary>
+            <remarks>json - by default. Available values: json, yaml</remarks>
+        </member>
+        <member name="T:MyLab.Log.Syslog.SyslogMessageSerializer">
+            <summary>
+            Serializes message
+            </summary>
+        </member>
+        <member name="P:MyLab.Log.Syslog.SyslogMessageSerializer.Level">
+            <summary>
+            Message level
+            </summary>
+        </member>
+        <member name="P:MyLab.Log.Syslog.SyslogMessageSerializer.LogTime">
+            <summary>
+            Occurence time
+            </summary>
+        </member>
+        <member name="P:MyLab.Log.Syslog.SyslogMessageSerializer.EventId">
+            <summary>
+            Event identifier
+            </summary>
+        </member>
+        <member name="M:MyLab.Log.Syslog.SyslogMessageSerializer.#ctor(MyLab.Log.Syslog.SyslogLoggerOptions)">
+            <summary>
+            Initializes a new instance of <see cref="T:MyLab.Log.Syslog.SyslogMessageSerializer"/>
+            </summary>
+        </member>
+        <member name="M:MyLab.Log.Syslog.SyslogMessageSerializer.GetHeaderLen">
+            <summary>
+            Gets header length
+            </summary>
+        </member>
+        <member name="M:MyLab.Log.Syslog.SyslogMessageSerializer.Serialize(System.String)">
+            <summary>
+            Serializes message with content
+            </summary>
+        </member>
+    </members>
+</doc>
